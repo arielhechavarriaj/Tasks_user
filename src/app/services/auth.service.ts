@@ -2,7 +2,6 @@ import {computed, inject, Injectable, signal} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, map, Observable, of} from 'rxjs';
 import {AuthStatus, CheckTokenResponse, RegisterResponse, StatusRegister, User} from '../interfaces';
-import {JwtHelperService} from "@auth0/angular-jwt";
 import * as CryptoJS from 'crypto-js';
 
 
@@ -10,8 +9,6 @@ import * as CryptoJS from 'crypto-js';
   providedIn: 'root'
 })
 export class AuthService {
-
-  private jwtHelper = new JwtHelperService();
   private secretKey = '%ariel.$task.$app.#';
 
   private readonly baseUrl: string = 'environment.baseUrl';
@@ -56,9 +53,7 @@ export class AuthService {
   isEmailTaken(email: string): Observable<any> {
     // @ts-ignore
     const users = JSON.parse(localStorage.getItem('users')) || [];
-
     return of(users.find((user: any) => user.email === email));
-
   }
 
   login(email: string, password: string): Observable<boolean> {
@@ -122,6 +117,7 @@ export class AuthService {
   /**
    * Estas funciones son simplementes para generar el token, dado el contexto de la prueba es que se usan
    * pero solo en este contexto por temas de seguridad, etc....
+   * https://stackoverflow.com/a/69094721
    */
   private createJwtToken(payload: any, secretKey: string): string {
     const header = {
