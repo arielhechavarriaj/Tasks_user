@@ -1,8 +1,22 @@
-<div fxLayout="row" fxLayoutAlign="space-between center">
-  <div>Task</div>
-  <div fxLayout="row" fxLayoutGap="20px">
-    <a routerLink="/login">Login</a>
-    <a routerLink="/author">Author</a>
-  </div>
-</div>
+<!--<div fxLayout="row" fxLayoutAlign="space-between center">-->
+<!--  <div>-->
+<!--    Gestionar Tareas-->
+<!--  </div>-->
+<!--  <div fxLayout="row" fxLayoutGap="20px">-->
+<!--    <a >logout</a>-->
+<!--    <a routerLink="/author">Author</a>-->
+<!--  </div>-->
+<!--</div>-->
 
+
+<nav class="navbar bg-body-black">
+  <div class="container-fluid ">
+    <button class="btn btn-outline-success bi bi-house mx-1" type="button"></button>
+    <a class="navbar-brand text-success">Gestionar Tareas</a>
+    <form class="d-flex" role="search">
+
+      <button class="btn btn-outline-success bi bi-person-circle mx-1" type="button"></button>
+      <button (click)="onLogout()" class="btn btn-outline-success bi bi-box-arrow-right" type="button"></button>
+    </form>
+  </div>
+</nav>
