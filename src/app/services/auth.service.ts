@@ -1,11 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import {
-  AuthStatus,
-  RegisterResponse,
-  StatusRegister,
-  User,
-} from '../interfaces';
+import { AuthStatus, StatusRegister, User } from '../interfaces';
 import * as CryptoJS from 'crypto-js';
 import { Router } from '@angular/router';
 
@@ -26,16 +21,14 @@ export class AuthService {
     this.checkAuthStatus();
   }
 
-  register(
-    email: string,
-    password: string,
-    name: string,
-  ): Observable<RegisterResponse> {
-    const users: User[] = JSON.parse(localStorage.getItem('users') || '') || [];
+  register(email: string, password: string, name: string): Observable<any> {
+    const usersString = localStorage.getItem('users');
+    const users: User[] = usersString ? JSON.parse(usersString) : [];
+
     const oldUser = users.find((user) => user.email === email);
 
     if (oldUser) {
-      return of({ message: StatusRegister.notcreated });
+      return of({ message: StatusRegister.notCreated });
     }
 
     const newUser = { email, password, name };
@@ -45,12 +38,15 @@ export class AuthService {
   }
 
   isEmailTaken(email: string): Observable<any> {
-    const users: User[] = JSON.parse(localStorage.getItem('users') || '') || [];
+    const _users = localStorage.getItem('users');
+    const users: User[] = _users ? JSON.parse(_users) : [];
     return of(users.find((user) => user.email === email));
   }
 
   login(email: string, password: string): Observable<boolean> {
-    const users: User[] = JSON.parse(localStorage.getItem('users') || '') || [];
+    const usersString = localStorage.getItem('users');
+    const users: User[] = usersString ? JSON.parse(usersString) : [];
+
     const user = users.find(
       (u) => u.email === email && u.password === password,
     );
@@ -65,13 +61,13 @@ export class AuthService {
   }
 
   checkAuthStatus() {
-    const currentUser: User =
-      JSON.parse(localStorage.getItem('currentUser') || '') || null;
+    const _currentUser = localStorage.getItem('currentUser');
     const token = localStorage.getItem('token');
 
-    if (!token) {
+    if (!token || !_currentUser) {
       this.logout();
     } else {
+      const currentUser: User = JSON.parse(_currentUser);
       this._authStatus.set(AuthStatus.authenticated);
       this._currentUser.set(currentUser);
     }
@@ -106,6 +102,8 @@ export class AuthService {
   private setAuthentication(user: User, token: string): boolean {
     this._currentUser.set(user);
     this._authStatus.set(AuthStatus.authenticated);
+
+    console.log(user, 'USER');
 
     localStorage.setItem('token', token);
     localStorage.setItem('currentUser', JSON.stringify(user));

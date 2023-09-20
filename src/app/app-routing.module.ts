@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListTasksComponent } from './components/list-tasks/list-tasks.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import {
+  DashboardLayoutComponent,
+  PageNotFoundComponent,
+} from '@app/components';
 import { isAuthenticatedGuard, isNotAuthenticatedGuard } from './guards';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
-import { AuthorComponent } from './components/author/author.component';
+import { TaskService } from '@services/task-service.service';
 
 const routes: Routes = [
   {
@@ -16,28 +15,58 @@ const routes: Routes = [
     children: [
       {
         path: 'task',
-        component: ListTasksComponent,
+        loadComponent: () =>
+          import('./components/list-tasks/list-tasks.component').then(
+            (c) => c.ListTasksComponent,
+          ),
+      },
+      {
+        path: 'formTask',
+        loadComponent: () =>
+          import('././components/form-task/form-task.component').then(
+            (c) => c.FormTaskComponent,
+          ),
       },
       {
         path: '404',
-        component: PageNotFoundComponent,
+        loadComponent: () =>
+          import('./components/page-not-found/page-not-found.component').then(
+            (c) => c.PageNotFoundComponent,
+          ),
       },
       {
         path: 'author',
-        component: AuthorComponent,
+        loadComponent: () =>
+          import('././components/author/author.component').then(
+            (c) => c.AuthorComponent,
+          ),
       },
+      { path: '', redirectTo: 'task', pathMatch: 'full' },
     ],
+    providers: [TaskService],
   },
   {
     path: 'auth',
     canActivate: [isNotAuthenticatedGuard],
     children: [
-      { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('./components/login/login.component').then(
+            (c) => c.LoginComponent,
+          ),
+      },
+      {
+        path: 'register',
+        loadComponent: () =>
+          import('./components/register/register.component').then(
+            (c) => c.RegisterComponent,
+          ),
+      },
       { path: '**', redirectTo: 'login' },
     ],
   },
-  { path: '', redirectTo: '/task', pathMatch: 'full' },
+
   { path: '**', component: PageNotFoundComponent },
 ];
 

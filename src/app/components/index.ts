@@ -7,3 +7,4 @@ export * from './register/register.component';
 export * from './list-tasks/list-tasks.component';
 export * from './page-not-found/page-not-found.component';
 export * from './header/header.component';
+export * from './dashboard-layout/dashboard-layout.component';

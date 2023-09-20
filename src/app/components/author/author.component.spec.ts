@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuthorComponent } from './author.component';
+import { AuthorComponent } from '@app/components';
 
 describe('AuthorComponent', () => {
   let component: AuthorComponent;
@@ -8,7 +8,7 @@ describe('AuthorComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AuthorComponent]
+      imports: [AuthorComponent],
     });
     fixture = TestBed.createComponent(AuthorComponent);
     component = fixture.componentInstance;

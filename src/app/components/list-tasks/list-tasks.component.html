@@ -1,1 +1,100 @@
-{{authService.currentUser() | json}}
+<div class="container p-5">
+  <div class="d-flex justify-content-center alert alert-success shadows-lg " role="alert">
+    <span>
+      Hola   {{authService.currentUser()?.name | json}}
+      <strong class="alert-link mx-1" href="#">
+       </strong
+       >!. Estas son sus tareas.</span
+    >
+  </div>
+
+  <nav class="navbar">
+    <div class="container-fluid">
+      <div class="mb-4">
+        <div class="form-group row text-success">
+          <div class="col-md-6">
+            <label for="stateFilter">Filtrar por Estado:</label>
+            <select
+              [(ngModel)]="selectedState"
+              class="form-control"
+              id="stateFilter"
+              name="stateFilter"
+            >
+              <option value="">Todos</option>
+              <option value="Creado">Creado</option>
+              <option value="En Progreso">En Progreso</option>
+              <option value="Terminado">Terminado</option>
+              <option value="No Completado">No Completado</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="nameFilter">Filtrar por Nombre:</label>
+            <div class="input-group">
+              <input
+                [(ngModel)]="nameFilter"
+                class="form-control"
+                id="nameFilter"
+                name="nameFilter"
+                placeholder="Buscar por nombre.."
+                type="text"
+              />
+              <div class="input-group-append">
+          <span class="input-group-text text-success">
+            <i class="bi bi-search"></i>
+          </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <span>
+        <button
+          (click)="onNewTask()"
+          class="btn btn-outline-success mx-1 mb-3 bi bi-building-add"
+        >
+         Nueva Tarea
+        </button>   <button
+        (click)="showOldestInProgressTask()"
+        class="btn btn-outline-success mx-1 mb-3 bi bi-list-task "
+      >
+          Tarea en Progreso más Antigua
+        </button>
+
+        <button (click)="showExpiredTasks()" class="btn btn-outline-danger mb-3 ml-3 bi bi-calendar-date">
+          Tareas Vencidas
+        </button>
+      </span>
+    </div>
+  </nav>
+  <div class="containerp-5">
+    <!-- Lista de tareas filtradas -->
+    <table class="table table-hover table-striped">
+      <thead class="table-success">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">Creado</th>
+        <th scope="col">Fecha límite</th>
+        <th scope="col">Estado</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let task of filteredTasks">
+        <th scope="row">{{ task.id }}</th>
+        <td>{{ task.name }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.created_date | date: "dd/MM/yyyy" }}</td>
+        <td>{{ task.expire_date | date: "dd/MM/yyyy" }}</td>
+        <td>
+            <span [ngClass]="getBadgeClass(task.status)">{{
+              task.status
+              }}</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

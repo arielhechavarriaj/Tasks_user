@@ -1,36 +1,51 @@
-<div class="container-fluid bg-app">
+<div class="container-fluid ">
   <div class="row justify-content-center align-items-center" style="height: 100vh;">
     <div class="col-md-6">
-      <form [formGroup]="userForm" (ngSubmit)="login()" class="p-4 text-light border rounded">
-        <h2 class="mb-4">Gestionar tus Tareas</h2>
+      <form (ngSubmit)="login()" [formGroup]="userForm" class="card shadows-lg p-4 text-success border rounded">
+
+        <h2 class="card-title d-flex justify-content-between align-items-center ">Gestionar tus Tareas
+          <button class="btn  btn-outline-success btn-block mt-3" routerLink="/auth/register">No tienes Cuenta🤔</button>
+        </h2>
+
         <div class="form-group">
           <label for="email">Correo:</label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+              <span class="input-group-text text-success"><i class="bi bi-envelope-fill"></i></span>
             </div>
-            <input type="email" id="email" formControlName="email" class="form-control">
+            <input [ngClass]="{ 'is-invalid': userForm.get('email')?.hasError('emailInvalid') }" class="form-control" formControlName="email" id="email"
+                   type="email">
+            <div *ngIf="userForm.get('email')?.hasError('emailInvalid')" class="invalid-feedback">
+              Correo electrónico inválido
+            </div>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group ">
           <label for="password">Contraseña:</label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+              <span class="input-group-text"><i class=" text-success bi bi-lock-fill"></i></span>
             </div>
-            <input [type]="showPassword ? 'text':'password'" id="password" formControlName="password" class="form-control">
+            <input [ngClass]="{ 'is-invalid': userForm.get('password')?.hasError('passwordInvalid') }" [type]="showPassword ? 'text':'password'" class="form-control"
+                   formControlName="password"
+                   id="password">
             <div class="input-group-append">
-              <span class="input-group-text" (click)="showPassword=!showPassword">
-                <i [class]="showPassword ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+              <span (click)="showPassword=!showPassword" class="input-group-text text-success">
+                <i [class]="showPassword ? ' bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
               </span>
+            </div>
+            <div *ngIf="userForm.get('password')?.hasError('passwordInvalid')" class="invalid-feedback">
+              Contraseña inválida
             </div>
           </div>
         </div>
-        <div class=" justify-content-between align-items-center" >
+        <div class=" justify-content-between align-items-center">
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <button type="submit" class="btn btn-outline-primary  mt-3">Login</button>
-          <button  class="btn  btn-outline-info btn-block mt-3" routerLink="/auth/register">No tienes Cuenta🤔</button>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <button *ngIf="userForm.valid" class="btn btn-outline-success  mt-3" type="submit"><span
+            *ngIf="!userForm.valid" class="bi bi-lock"></span>Login
+          </button>
+
         </div>
       </form>
     </div>

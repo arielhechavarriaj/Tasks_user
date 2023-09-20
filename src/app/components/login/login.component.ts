@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -7,10 +6,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '@services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { FlexModule } from '@angular/flex-layout';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -35,6 +35,10 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  constructor() {
+    this.fieldsValidation();
+  }
+
   login() {
     const { email, password } = this.userForm.value;
 
@@ -42,12 +46,37 @@ export class LoginComponent {
       next: (data) => {
         if (data) this.router.navigateByUrl('/task').then();
         else {
-          Swal.fire('Info', 'El usuario no existe', 'info').then();
+          Swal.fire('Info', 'Las credenciales no son correctas', 'info').then();
         }
       },
       error: (message) => {
         Swal.fire('Error', message, 'error').then();
       },
+    });
+  }
+
+  private fieldsValidation() {
+    const emailControl = this.userForm.get('email');
+    const passwordControl = this.userForm.get('password');
+
+    emailControl?.valueChanges.subscribe((value) => {
+      if (
+        emailControl.invalid &&
+        (emailControl.dirty || emailControl.touched)
+      ) {
+        // Campo de correo electrónico inválido y tocado
+        emailControl.setErrors({ emailInvalid: true });
+      }
+    });
+
+    passwordControl?.valueChanges.subscribe((value) => {
+      if (
+        passwordControl.invalid &&
+        (passwordControl.dirty || passwordControl.touched)
+      ) {
+        // Campo de contraseña inválido y tocado
+        passwordControl.setErrors({ passwordInvalid: true });
+      }
     });
   }
 }
