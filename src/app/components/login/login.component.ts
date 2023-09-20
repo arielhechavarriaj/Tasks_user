@@ -59,7 +59,7 @@ export class LoginComponent {
     const emailControl = this.userForm.get('email');
     const passwordControl = this.userForm.get('password');
 
-    emailControl?.valueChanges.subscribe((value) => {
+    emailControl?.valueChanges.subscribe(() => {
       if (
         emailControl.invalid &&
         (emailControl.dirty || emailControl.touched)
@@ -69,7 +69,7 @@ export class LoginComponent {
       }
     });
 
-    passwordControl?.valueChanges.subscribe((value) => {
+    passwordControl?.valueChanges.subscribe(() => {
       if (
         passwordControl.invalid &&
         (passwordControl.dirty || passwordControl.touched)
