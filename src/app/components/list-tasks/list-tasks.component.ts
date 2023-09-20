@@ -77,7 +77,7 @@ export class ListTasksComponent implements OnInit {
     );
 
     if (oldestInProgressTasks.length === 0) {
-      Swal.fire('No hay tareas en Progreso', '', 'info');
+      Swal.fire('No hay tareas en Progreso', '', 'info').then();
       return;
     }
 
@@ -100,7 +100,7 @@ export class ListTasksComponent implements OnInit {
         ).toLocaleDateString()}
       `,
       icon: 'info',
-    });
+    }).then();
   }
 
   /**
@@ -113,7 +113,7 @@ export class ListTasksComponent implements OnInit {
     );
 
     if (expiredTasks.length === 0) {
-      Swal.fire('No hay tareas vencidas', '', 'info');
+      Swal.fire('No hay tareas vencidas', '', 'info').then();
       return;
     }
 
@@ -130,7 +130,7 @@ export class ListTasksComponent implements OnInit {
       title: 'Tareas Vencidas',
       html: expiredTasksList,
       icon: 'warning',
-    });
+    }).then();
   }
 
   onNewTask() {

@@ -21,6 +21,12 @@ export class AuthService {
     this.checkAuthStatus();
   }
 
+  /**
+   * Registrar un nuevo usuario usando localStorage para persistir la informacion
+   * @param email
+   * @param password
+   * @param name
+   */
   register(email: string, password: string, name: string): Observable<any> {
     const usersString = localStorage.getItem('users');
     const users: User[] = usersString ? JSON.parse(usersString) : [];
@@ -37,12 +43,21 @@ export class AuthService {
     return of({ message: StatusRegister.created });
   }
 
+  /**
+   * Verificar si existe el usuario mediante el email.
+   * @param email
+   */
   isEmailTaken(email: string): Observable<any> {
     const _users = localStorage.getItem('users');
     const users: User[] = _users ? JSON.parse(_users) : [];
     return of(users.find((user) => user.email === email));
   }
 
+  /**
+   * Validar las credenciales para autorizar a un usuario
+   * @param email
+   * @param password
+   */
   login(email: string, password: string): Observable<boolean> {
     const usersString = localStorage.getItem('users');
     const users: User[] = usersString ? JSON.parse(usersString) : [];
@@ -60,6 +75,9 @@ export class AuthService {
     return of(false);
   }
 
+  /**
+   * Verificar si el cliente tiene los permisos correctos para estar en el sistema mediante el token de accesso
+   */
   checkAuthStatus() {
     const _currentUser = localStorage.getItem('currentUser');
     const token = localStorage.getItem('token');
@@ -73,6 +91,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * Salir del sistema, eliminado la informacion de acceso
+   */
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
@@ -82,6 +103,12 @@ export class AuthService {
     this.router.navigateByUrl('/auth').then();
   }
 
+  /**
+   * Funcion auxiliar para generar un token, esto es solo para cumplir con los objetivos de la prueba una aplicacion real ,
+   * maneja esto de muchas otras maneras
+   * @param payload
+   * @param secretKey
+   */
   generateToken(payload: any, secretKey: string): string {
     const encodedPayload = CryptoJS.enc.Base64.stringify(
       CryptoJS.enc.Utf8.parse(JSON.stringify(payload)),
@@ -99,6 +126,12 @@ export class AuthService {
     )}`;
   }
 
+  /**
+   * Guardar la informacion del login exitoso
+   * @param user
+   * @param token
+   * @private
+   */
   private setAuthentication(user: User, token: string): boolean {
     this._currentUser.set(user);
     this._authStatus.set(AuthStatus.authenticated);

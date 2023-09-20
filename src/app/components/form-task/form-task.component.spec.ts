@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormTaskComponent } from './form-task.component';
+import { FormTaskComponent } from '@app/components';
 
 describe('FormTaskComponent', () => {
   let component: FormTaskComponent;
@@ -8,7 +8,7 @@ describe('FormTaskComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormTaskComponent]
+      imports: [FormTaskComponent],
     });
     fixture = TestBed.createComponent(FormTaskComponent);
     component = fixture.componentInstance;
