@@ -1,5 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
+
 import {
+  AbstractControl,
+  AbstractControlOptions,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -11,32 +15,21 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { FlexModule } from '@angular/flex-layout';
 import { AuthService } from '@services/auth.service';
+import { StatusRegister } from '@app/interfaces';
 import Swal from 'sweetalert2';
 import { EmailValidator } from '@app/helpers/email.validators';
-import { CommonModule } from '@angular/common';
-import { StatusRegister } from '@app/interfaces';
 
-// @ts-ignore
 const passwordValidator: ValidatorFn = (
-  control: FormGroup,
+  control: AbstractControl,
 ): ValidationErrors | null => {
   const password = control.get('password');
   const confirmPassword = control.get('confirmPassword');
-
   if (!password || !confirmPassword) {
     return null;
   }
-
-  if (password.value !== confirmPassword.value) {
-    return { passwordsNotMatch: true };
-  }
-
-  const strongPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
-  if (!strongPasswordRegex.test(password.value)) {
-    return { weakPassword: true };
-  }
-
-  return null;
+  return password.value === confirmPassword.value
+    ? null
+    : { passwordsNotMatch: true };
 };
 
 @Component({
@@ -44,6 +37,7 @@ const passwordValidator: ValidatorFn = (
   standalone: true,
   templateUrl: './register.component.html',
   imports: [
+    NgIf,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -54,10 +48,8 @@ const passwordValidator: ValidatorFn = (
 })
 export class RegisterComponent implements OnInit {
   errorMessage = '';
-  showPassword = false;
-  formOptions: { validators: ValidatorFn[] } = {
-    validators: [passwordValidator],
-  };
+  showPassword: any;
+  formOptions: AbstractControlOptions = { validators: passwordValidator };
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
@@ -69,9 +61,11 @@ export class RegisterComponent implements OnInit {
         [Validators.minLength(3), Validators.required],
         [EmailValidator.createValidator(this.authService)],
       ],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
+
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
     },
+
     this.formOptions,
   );
   private router = inject(Router);

@@ -148,11 +148,10 @@
           </div>
         </div>
 
-        <div class="row justify-content-be align-items-center"></div>
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="d-grid gap-2">
           <button
-            *ngIf="registerForm.valid"
-            class="btn btn-outline-primary btn-block mt-3"
+            [disabled]="!registerForm.valid"
+            class="btn btn-outline-success btn-block mt-3"
             type="submit"
           >
             Registrarse 😎
@@ -163,3 +162,4 @@
   </div>
 </div>
 
+{{registerForm.errors | json}}

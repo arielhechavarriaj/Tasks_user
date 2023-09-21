@@ -4,7 +4,9 @@
       <form (ngSubmit)="login()" [formGroup]="userForm" class="card shadows-lg p-4 text-success border rounded">
 
         <h2 class="card-title d-flex justify-content-between align-items-center ">Gestionar tus Tareas
-          <button class="btn  btn-outline-success btn-block mt-3" routerLink="/auth/register">No tienes Cuenta🤔</button>
+          <button class="btn  btn-outline-success btn-block mt-3" routerLink="/auth/register" type="button">No tienes
+            Cuenta🤔
+          </button>
         </h2>
 
         <div class="form-group">
@@ -41,12 +43,13 @@
         </div>
         <div class=" justify-content-between align-items-center">
         </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <button *ngIf="userForm.valid" class="btn btn-outline-success  mt-3" type="submit"><span
-            *ngIf="!userForm.valid" class="bi bi-lock"></span>Login
+        <div class="d-grid gap-2">
+          <button [disabled]="!userForm.valid" class="btn btn-outline-success  mt-3" type="submit"><span
+            *ngIf="!userForm.valid" class="bi bi-lock"></span>Iniciar
           </button>
-
         </div>
+
+
       </form>
     </div>
   </div>

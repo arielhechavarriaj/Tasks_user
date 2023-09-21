@@ -1,3 +1,8 @@
+/**
+ * @author: Ariel Hechavarria Jardines(leiraStudio@gmail.com)
+ * @summary: Servicio para gestionar las tareas asociadas a la autorizacion y registro en el sistema
+ */
+
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { AuthStatus, StatusRegister, User } from '../interfaces';
