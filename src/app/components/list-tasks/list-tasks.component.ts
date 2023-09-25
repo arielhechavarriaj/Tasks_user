@@ -176,12 +176,21 @@ export class ListTasksComponent implements OnInit {
   }
 
   onRemoveTask(task: Task) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top',
-      timer: 1500,
-      timerProgressBar: true,
+    Swal.fire({
+      title: 'Esta seguro que quiere eliminar esta tarea?',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: `Cancelar`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+
+      if (result.isConfirmed) {
+        this.taskService
+          .deleteTask(task.id)
+          .subscribe((value) => this.loadTaks());
+      } else if (result.isDenied) {
+        console.log(12);
+      }
     });
-    Toast.fire('Something interesting happened', '', 'success');
   }
 }

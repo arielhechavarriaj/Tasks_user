@@ -109,20 +109,25 @@ export class TaskService {
     }
   }
 
-  //
-  // /**
-  //  * Eliminar Tarea
-  //  * @param id
-  //  */
-  //
-  // deleteTask(id: string): void {
-  //   const taskIndex = this.tasks.findIndex((t) => t.id === id);
-  //   if (taskIndex !== -1) {
-  //     this.tasks.splice(taskIndex, 1);
-  //     this.saveTasksToLocalStorage();
-  //     this.tasksSubject.next(this.tasks);
-  //   }
-  // }
+  /**
+   * Eliminar Tarea
+   * @param id
+   */
+
+  deleteTask(id: string): Observable<any> {
+    const taskIndex = this.tasks().findIndex((t) => t.id === id);
+    if (taskIndex !== -1) {
+      this.tasks().splice(taskIndex, 1);
+      localStorage.setItem('tasks', JSON.stringify(this.tasks()));
+      Swal.fire(
+        'Éxito',
+        'La tarea se ha eliminado con éxito',
+        'success',
+      ).then();
+      return of(true);
+    }
+    return of(false);
+  }
   //
   // /**
   //  * Filtrar Tarea por estado
