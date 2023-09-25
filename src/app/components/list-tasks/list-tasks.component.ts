@@ -182,12 +182,8 @@ export class ListTasksComponent implements OnInit {
       confirmButtonText: 'Eliminar',
       cancelButtonText: `Cancelar`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-
       if (result.isConfirmed) {
-        this.taskService
-          .deleteTask(task.id)
-          .subscribe((value) => this.loadTaks());
+        this.taskService.deleteTask(task.id).subscribe(() => this.loadTaks());
       } else if (result.isDenied) {
         console.log(12);
       }
