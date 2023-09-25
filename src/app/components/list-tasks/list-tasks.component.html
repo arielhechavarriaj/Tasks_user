@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container p-4">
 
   <div
           class="d-flex justify-content-center alert alert-success shadows-lg my-lg-2"
@@ -6,76 +6,77 @@
   >
     <span>
       Hola
-      <strong class="alert-link mx-1" href="#"
+      <strong class="alert-link " href="#"
       >{{ authService.currentUser()?.name | uppercase }} </strong
       >estas son sus tareas.</span
     >
   </div>
 
-  <div class="container-fluid">
-    <form [formGroup]="taskForm" class=" row">
-      <div class="form-group row text-success col-6">
-        <label for="stateFilter">Filtrar por Estado:</label>
-        <select
-                class="form-control"
-                formControlName="filterStatus"
-                id="stateFilter"
-                name="stateFilter"
-        >
-          <option class="bg-dark text-primary" value="">---Todos---</option>
-          <option selected value="Creado">Creado</option>
-          <option value="En Progreso">En Progreso</option>
-          <option value="Terminado">Terminado</option>
-          <option value="No Completado">No Completado</option>
-        </select>
-      </div>
-      <div class="form-group row text-success col-6 ">
-        <div class="">
-          <label for="nameFilter">Filtrar por Nombre:</label>
-          <div class="input-group">
-            <input
-                    class="form-control"
-                    formControlName="filterName"
-                    id="nameFilter"
-                    name="nameFilter"
-                    placeholder="Buscar.."
-                    type="text"
-            />
-            <div class="input-group-append">
+
+  <div class="container ">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <form [formGroup]="taskForm" class=" mb-2 mx-3 row">
+        <div class="form-group row text-success col-6">
+          <label for="stateFilter">Filtrar por Estado:</label>
+          <select
+                  class="form-control"
+                  formControlName="filterStatus"
+                  id="stateFilter"
+                  name="stateFilter"
+          >
+            <option class="bg-dark text-primary" value="">---Todos---</option>
+            <option selected value="Creado">Creado</option>
+            <option value="En Progreso">En Progreso</option>
+            <option value="Terminado">Terminado</option>
+            <option value="No Completado">No Completado</option>
+          </select>
+        </div>
+        <div class="form-group row text-success col-6 ">
+          <div class="">
+            <label for="nameFilter">Filtrar por Nombre:</label>
+            <div class="input-group">
+              <input
+                      class="form-control"
+                      formControlName="filterName"
+                      id="nameFilter"
+                      name="nameFilter"
+                      placeholder="Buscar.."
+                      type="text"
+              />
+              <div class="input-group-append">
               <span class="input-group-text text-success">
                 <i class="bi bi-search"></i>
               </span>
+              </div>
             </div>
           </div>
+
         </div>
+      </form>
+      <span>
+       <button
+               (click)="onNewTask()"
+               class="btn btn-outline-success mx-1 bi bi-building-add"
+       >
+      Nueva Tarea
+    </button>
+    <button
+            (click)="showOldestInProgressTask()"
+            class="btn btn-outline-success mx-1 bi bi-clock-history"
+    >
+      Más Antigua
+    </button>
 
-      </div>
-    </form>
+    <button
+            (click)="showExpiredTasks()"
+            class="btn btn-outline-danger ml-3 bi bi-calendar-check"
+    >
+      Tareas Vencidas
+    </button>
+   </span>
 
-    <div class=" col-6 mt-2">
-      <button
-              (click)="onNewTask()"
-              class="btn btn-outline-success mx-1 bi bi-building-add"
-      >
-        Nueva Tarea
-      </button>
-      <button
-        (click)="showOldestInProgressTask()"
-        class="btn btn-outline-success mx-1 bi bi-clock-history"
-      >
-        Más Antigua
-      </button>
 
-      <button
-              (click)="showExpiredTasks()"
-              class="btn btn-outline-danger ml-3 bi bi-calendar-check"
-      >
-        Tareas Vencidas
-      </button>
     </div>
-  </div>
-
-  <div class="container p-5">
     <table class="table table-hover table-striped table-bordered">
       <thead class="table-success">
       <tr>
@@ -121,6 +122,7 @@
           ></button>
           <button
                   [disabled]="task.status!=StatusTask.created"
+                  (click)="onRemoveTask(task)"
                   class="btn btn-sm btn-danger bi bi-trash"
                   type="button"
           ></button>

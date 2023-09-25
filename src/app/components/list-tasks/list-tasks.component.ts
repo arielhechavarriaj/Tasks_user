@@ -11,11 +11,12 @@ import { TaskService } from '@services/task-service.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
+import { FlexModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-list-tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FlexModule],
   templateUrl: './list-tasks.component.html',
   styleUrls: ['./list-tasks.component.scss'],
 })
@@ -172,5 +173,15 @@ export class ListTasksComponent implements OnInit {
 
   onViewTask(task: Task) {
     this.route.navigateByUrl(`/formTask/${task.id}`).then();
+  }
+
+  onRemoveTask(task: Task) {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top',
+      timer: 1500,
+      timerProgressBar: true,
+    });
+    Toast.fire('Something interesting happened', '', 'success');
   }
 }
