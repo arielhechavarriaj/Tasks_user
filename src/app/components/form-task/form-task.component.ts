@@ -40,8 +40,7 @@ export class FormTaskComponent implements OnInit {
   @Input() set id(taskId: string) {
     this.taskService.getTaskbyId(taskId).subscribe((task) => {
       if (task) {
-        const { name, id, created_date, expire_date, description, status } =
-          task;
+        const { name, created_date, expire_date, description, status } = task;
         this.taskSelected.set(task);
         this.taskForm = this.fb.group({
           name: [name],

@@ -42,7 +42,6 @@ export class ListTasksComponent implements OnInit {
   loading = false;
   notData = false;
   protected readonly StatusTask = StatusTask;
-  private searchServer: boolean = false;
 
   /**
    * ngOnInit
