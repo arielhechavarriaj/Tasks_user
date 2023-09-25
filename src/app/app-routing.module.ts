@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {
+  provideRouter,
+  RouterModule,
+  Routes,
+  withComponentInputBinding,
+} from '@angular/router';
 import {
   DashboardLayoutComponent,
   PageNotFoundComponent,
@@ -21,7 +26,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'formTask',
+        path: 'formTask/:id',
         loadComponent: () =>
           import('././components/form-task/form-task.component').then(
             (c) => c.FormTaskComponent,
@@ -73,5 +78,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  providers: [provideRouter(routes, withComponentInputBinding())],
 })
 export class AppRoutingModule {}

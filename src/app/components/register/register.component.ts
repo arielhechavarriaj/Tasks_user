@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 
 import {
@@ -17,7 +17,7 @@ import { FlexModule } from '@angular/flex-layout';
 import { AuthService } from '@services/auth.service';
 import { StatusRegister } from '@app/interfaces';
 import Swal from 'sweetalert2';
-import { EmailValidator } from '@app/helpers/email.validators';
+import { EmailValidator } from '@app/helpers/customs.validators';
 
 const passwordValidator: ValidatorFn = (
   control: AbstractControl,
@@ -46,7 +46,7 @@ const passwordValidator: ValidatorFn = (
   ],
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   errorMessage = '';
   showPassword: any;
   formOptions: AbstractControlOptions = { validators: passwordValidator };
@@ -69,8 +69,6 @@ export class RegisterComponent implements OnInit {
     this.formOptions,
   );
   private router = inject(Router);
-
-  ngOnInit() {}
 
   onSubmit(): void {
     const { name, email, password } = this.registerForm.value;

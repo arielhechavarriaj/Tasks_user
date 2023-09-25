@@ -1,6 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { StatusTask, Task } from '@app/interfaces';
 import { TaskService } from '@services/task-service.service';
 import Swal from 'sweetalert2';
@@ -16,56 +21,70 @@ import { Router } from '@angular/router';
 })
 export class ListTasksComponent implements OnInit {
   tasks: Task[] = [];
-  selectedState = '';
+  filterStatus = '';
   nameFilter = '';
-  filteredTasks!: Task[];
+  filteredTasks: Task[] = [];
   taskService = inject(TaskService);
   authService = inject(AuthService);
+  fb = inject(FormBuilder);
   route = inject(Router);
+  colorStatusMap = new Map();
+  taskForm: FormGroup = this.fb.group({
+    filterName: [''],
+    filterStatus: [''],
+    searchServer: [true],
+  });
+
+  page = '1';
+  start = '0';
+  limit = '100';
+  filterName = '';
+  loading = false;
+  notData = false;
+  protected readonly StatusTask = StatusTask;
+  private searchServer: boolean = false;
 
   /**
    * ngOnInit
    */
   ngOnInit(): void {
-    this.taskService.getTasks().subscribe((tasks: Task[]) => {
-      this.tasks = tasks;
+    this.loadTaks();
+
+    this.taskForm.controls['filterName'].valueChanges.subscribe((value) => {
+      this.nameFilter = value;
       this.filterTasks();
     });
-  }
-
-  /**
-   * Filtrar las tareas
-   */
-  filterTasks(): void {
-    this.filteredTasks = this.tasks.filter((task) => {
-      const stateMatch =
-        this.selectedState === '' || task.status === this.selectedState;
-      const nameMatch =
-        task.name.toLowerCase().includes(this.nameFilter.toLowerCase()) ||
-        this.nameFilter === '';
-
-      return stateMatch && nameMatch;
+    this.taskForm.controls['filterStatus'].valueChanges.subscribe((value) => {
+      this.filterStatus = value;
+      this.filterTasks();
     });
+
+    this.colorStatusMap.set(StatusTask.created, 'badge text-bg-warning');
+    this.colorStatusMap.set(StatusTask.inProgress, 'badge text-bg-primary');
+    this.colorStatusMap.set(StatusTask.done, 'badge text-bg-success');
+    this.colorStatusMap.set(StatusTask.incomplete, 'text-bg badge-danger');
   }
 
-  /**
-   * Obtener la clase CSS para las etiquetas de estado (Badge)
-   * @param status
-   */
+  loadTaks() {
+    this.loading = true;
+    this.taskService
+      .getTasks(
+        this.page,
+        this.start,
+        this.limit,
+        this.filterStatus,
+        this.filterName,
+      )
+      .subscribe((tasks) => {
+        this.tasks = tasks;
+        this.loading = false;
+        this.notData = tasks.length === 0;
+        this.filterTasks();
+      });
+  }
 
-  getBadgeClass(status: StatusTask): string {
-    switch (status) {
-      case StatusTask.created:
-        return 'badge badge-warning';
-      case StatusTask.inProgress:
-        return 'badge badge-primary';
-      case StatusTask.done:
-        return 'badge badge-success';
-      case StatusTask.incomplete:
-        return 'badge badge-danger';
-      default:
-        return 'badge badge-secondary';
-    }
+  trackByTask(index: number, item: Task): string {
+    return item.id;
   }
 
   /**
@@ -133,7 +152,26 @@ export class ListTasksComponent implements OnInit {
     }).then();
   }
 
+  /**
+   * Filtrar las tareas
+   */
+  filterTasks(): void {
+    this.filteredTasks = this.tasks.filter((task) => {
+      const stateMatch =
+        this.filterStatus === '' || task.status === this.filterStatus;
+      const nameMatch =
+        task.name.toLowerCase().includes(this.nameFilter.toLowerCase()) ||
+        this.nameFilter === '';
+
+      return stateMatch && nameMatch;
+    });
+  }
+
   onNewTask() {
-    this.route.navigateByUrl('/formTask').then();
+    this.route.navigateByUrl('/formTask/').then();
+  }
+
+  onViewTask(task: Task) {
+    this.route.navigateByUrl(`/formTask/${task.id}`).then();
   }
 }

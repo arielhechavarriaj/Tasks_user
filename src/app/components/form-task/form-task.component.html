@@ -1,1 +1,245 @@
-<p>form-task works!</p>
+<div class="container-fluid">
+
+  <div class="row justify-content-center mt-5" style="height: 100vh">
+
+    <div class="col-md-6">
+      <div
+              *ngIf="
+      taskSelected().status == StatusTask.done ||
+      taskSelected().status == StatusTask.incomplete
+    "
+              class="alert alert-danger"
+              role="alert"
+      >
+        Esta tarea no se puede modificar
+      </div>
+      <form
+              (ngSubmit)="onSubmit()"
+              [formGroup]="taskForm"
+              class="card text-success p-4 border rounded"
+      >
+        <h2 class="card-title d-flex justify-content-center align-items-center">
+          {{
+          taskSelected() == null ? "  Crear una tarea" : "Actualizar la tarea"
+          }}
+        </h2>
+
+        <div class="form-group my-1">
+          <label for="name">Nombre:</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text text-success"
+              ><i class="bi bi-file-earmark-text-fill"></i
+              ></span>
+            </div>
+            <input
+                    [readOnly]="taskSelected().status === StatusTask.done"
+                    class="form-control"
+                    formControlName="name"
+                    id="name"
+                    type="text"
+            />
+          </div>
+          <div
+                  *ngIf="
+              taskForm.get('name')?.hasError('required') &&
+              taskForm.get('name')?.touched
+            "
+                  class="text-warning"
+          >
+            El nombre es requerido
+          </div>
+          <div
+                  *ngIf="taskForm.get('name')?.hasError('nameTaken')"
+                  class="text-warning"
+          >
+            Este nombre no esta disponible
+          </div>
+        </div>
+
+        <div class="form-group my-1">
+          <label for="name">Descripcion:</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text text-success"
+              ><i class="bi bi-text-paragraph"></i
+              ></span>
+            </div>
+            <textarea
+                    [readOnly]="taskSelected().status === StatusTask.done"
+                    class="form-control"
+                    cols="10"
+                    formControlName="description"
+                    id="description"
+            ></textarea>
+          </div>
+          <div
+                  *ngIf="
+              taskForm.get('description')?.hasError('required') &&
+              taskForm.get('description')?.touched
+            "
+                  class="text-warning"
+          >
+            El campo Descripcion es requerido
+          </div>
+        </div>
+
+        <div class="form-group my-1">
+          <label for="created_date">Fecha de creación:</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text text-success"
+              ><i class="bi bi-text-paragraph"></i
+              ></span>
+            </div>
+
+            <input
+                    [readOnly]="taskSelected().status === StatusTask.done"
+                    class="form-control"
+                    formControlName="created_date"
+                    id="created_date"
+                    type="date"
+            />
+          </div>
+          <div
+                  *ngIf="
+              taskForm.get('created_date')?.hasError('required') &&
+              taskForm.get('created_date')?.touched
+            "
+                  class="text-warning"
+          >
+            El campo Fecha de creación es requerido
+          </div>
+
+          <div
+                  *ngIf="
+              taskForm
+                .get('created_date')
+                ?.hasError('created_date_initial_invalid') &&
+              taskForm.get('created_date')?.touched
+            "
+                  class="text-warning"
+          >
+            La fecha de creacion debe ser menor a la fecha de expiracion.
+          </div>
+        </div>
+
+        <div class="form-group my-1">
+          <label for="created_date">Fecha limite:</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text text-success"
+              ><i class="bi bi-text-paragraph"></i
+              ></span>
+            </div>
+
+            <input
+                    [readOnly]="taskSelected().status === StatusTask.done"
+                    class="form-control"
+                    formControlName="expire_date"
+                    id="expire_date"
+                    type="date"
+            />
+          </div>
+          <div
+                  *ngIf="
+              taskForm.get('expire_date')?.hasError('required') &&
+              taskForm.get('expire_date')?.touched
+            "
+                  class="text-warning"
+          >
+            El nombre es requerido
+          </div>
+
+          <div
+                  *ngIf="
+              taskForm
+                .get('expire_date')
+                ?.hasError('expire_date_initial_invalid') &&
+              taskForm.get('expire_date')?.touched
+            "
+                  class="text-warning"
+          >
+            La fecha de creacion debe ser menor a la fecha de expiracion.
+          </div>
+        </div>
+
+        <label for="status">Filtrar por Estado:</label>
+        <select
+                class="form-control"
+                formControlName="status"
+                id="status"
+                name="status"
+        >
+          <option
+                  [disabled]="
+              taskSelected().status === StatusTask.done ||
+              taskSelected().status == StatusTask.incomplete
+            "
+                  class="bg-dark text-primary"
+                  value=""
+          >
+            ---Todos---
+          </option>
+          <option
+                  [disabled]="
+              taskSelected().status === StatusTask.done ||
+              taskSelected().status == StatusTask.incomplete ||  taskSelected().status == StatusTask.inProgress
+            "
+                  [selected]="taskSelected().status == StatusTask.created"
+                  value="Creado"
+          >
+            Creado
+          </option>
+          <option
+                  [disabled]="
+              taskSelected().status === StatusTask.done ||
+              taskSelected().status == StatusTask.incomplete
+            "
+                  [selected]="taskSelected().status == StatusTask.inProgress"
+                  value="En Progreso"
+          >
+            En Progreso
+          </option>
+          <option
+                  [disabled]="
+              taskSelected().status === StatusTask.done ||
+              taskSelected().status == StatusTask.incomplete
+            "
+                  [selected]="taskSelected().status == StatusTask.done"
+                  value="Terminado"
+          >
+            Terminado
+          </option>
+          <option
+                  [disabled]="
+              taskSelected().status === StatusTask.done ||
+              taskSelected().status == StatusTask.incomplete
+            "
+                  [selected]="taskSelected().status == StatusTask.incomplete"
+                  value="No Completado"
+          >
+            No Completado
+          </option>
+        </select>
+
+        <div class="d-flex justify-content-between gap-2">
+          <button
+                  class="btn btn-outline-danger btn-block mt-3"
+                  routerLink="/"
+                  type="button"
+          >
+            Cancelar
+          </button>
+          <button
+                  [disabled]="!taskForm.valid"
+                  class="btn btn-outline-success btn-block mt-3"
+                  type="submit"
+          >
+            Aceptar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
