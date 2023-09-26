@@ -32,44 +32,46 @@ export class FormTaskComponent implements OnInit {
   @Output() taskAdded = new EventEmitter<Task>();
   taskService = inject(TaskService);
   router = inject(Router);
-  public taskSelected = signal<any>(null);
+  public taskSelected = signal<any>({ status: StatusTask.created });
   taskForm!: FormGroup;
   protected readonly StatusTask = StatusTask;
   private fb = inject(FormBuilder);
 
   @Input() set id(taskId: string) {
-    this.taskService.getTaskbyId(taskId).subscribe((task) => {
-      if (task) {
-        const { name, created_date, expire_date, description, status } = task;
-        this.taskSelected.set(task);
-        this.taskForm = this.fb.group({
-          name: [name],
-          description: [description],
-          created_date: [created_date],
-          expire_date: [expire_date],
-          status: [status],
-        });
-        const nameControl = this.taskForm.get('name');
-        nameControl?.valueChanges
-          ?.pipe(switchMap((value) => this.taskService.isNameTaken(value)))
-          .subscribe((value) => {
-            nameControl?.setErrors({
-              nameTaken: value != undefined,
-            });
+    if (taskId != '')
+      this.taskService.getTaskbyId(taskId).subscribe((task) => {
+        if (task) {
+          const { name, created_date, expire_date, description, status } = task;
+          this.taskSelected.set(task);
+          this.taskForm = this.fb.group({
+            name: [name],
+            description: [description],
+            created_date: [created_date],
+            expire_date: [expire_date],
+            status: [status],
           });
-      } else
-        this.taskForm = this.fb.group({
-          name: [
-            '',
-            [Validators.minLength(3), Validators.required],
-            [NameValidator.createValidator(this.taskService)],
-          ],
-          description: ['', Validators.required],
-          created_date: ['', Validators.required],
-          expire_date: ['', Validators.required],
-          status: [StatusTask.created, Validators.required],
-        });
-    });
+          const nameControl = this.taskForm.get('name');
+          nameControl?.valueChanges
+            ?.pipe(switchMap((value) => this.taskService.isNameTaken(value)))
+            .subscribe((value) => {
+              nameControl?.setErrors({
+                nameTaken: value != undefined,
+              });
+            });
+        }
+      });
+    else
+      this.taskForm = this.fb.group({
+        name: [
+          '',
+          [Validators.minLength(3), Validators.required],
+          [NameValidator.createValidator(this.taskService)],
+        ],
+        description: ['', Validators.required],
+        created_date: ['', Validators.required],
+        expire_date: ['', Validators.required],
+        status: [StatusTask.created, Validators.required],
+      });
   }
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class FormTaskComponent implements OnInit {
 
   onSubmit() {
     if (this.taskForm.valid)
-      if (!this.taskSelected()) {
+      if (this.taskSelected().name === undefined) {
         let id = new Date().getTime().toString();
         let obj = this.taskForm.value;
         const newTask: any = { ...obj, id };

@@ -25,13 +25,13 @@ export class TaskService {
    */
 
   getTasks(
-    page = '1',
-    start = '0',
-    limit = '10',
-    filterStatus = '',
-    filterName = '',
+    pageIndex: number = 0,
+    pageSize: number = 10,
+    filterStatus: string = '',
+    filterName: string = '',
   ): Observable<Task[]> {
-    let filteredTasks: Task[] = this.tasks();
+    // Aplicar los filtros
+    let filteredTasks = this.tasks();
 
     if (filterStatus) {
       filteredTasks = filteredTasks.filter(
@@ -41,17 +41,21 @@ export class TaskService {
 
     if (filterName) {
       filteredTasks = filteredTasks.filter((task) =>
-        task.name.includes(filterName),
+        task.name.toLowerCase().includes(filterName.toLowerCase()),
       );
     }
-    const startIndex = parseInt(start, 10);
-    const endIndex = startIndex + parseInt(limit, 10);
-    filteredTasks = filteredTasks.slice(startIndex, endIndex);
+
+    // Calcular los índices de inicio y fin para la paginación
+    const startIndex = pageIndex * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    // Recortar el arreglo de tareas para la paginación
+    const tasksForPage = filteredTasks.slice(startIndex, endIndex);
 
     return new Observable<Task[]>((observer) => {
-      // Simulanddo un llamada a la api
+      // Simular una llamada a la API con un retardo de 1 segundo
       setTimeout(() => {
-        observer.next(filteredTasks);
+        observer.next(tasksForPage);
         observer.complete();
       }, 1000);
     });

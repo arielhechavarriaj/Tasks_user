@@ -130,5 +130,21 @@
       </tr>
       </tbody>
     </table>
+
+    <nav aria-label="Paginacion">
+      <ul class="pagination justify-content-center">
+        <li [class.disabled]="pageIndex === 0" class="page-item">
+          <a (click)="goToPage(pageIndex - 1)" class="page-link">Anterior</a>
+        </li>
+        <li *ngFor="let page of pages()" class="page-item">
+          <a (click)="goToPage(page)" class="page-link">{{ page }}</a>
+        </li>
+        <li [class.disabled]="pageIndex === totalPages()" class="page-item">
+          <a (click)="goToPage(pageIndex + 1)" class="page-link">Siguiente</a>
+        </li>
+      </ul>
+    </nav>
+
+
   </div>
 </div>

@@ -36,9 +36,9 @@ export class ListTasksComponent implements OnInit {
     searchServer: [true],
   });
 
-  page = '1';
-  start = '0';
-  limit = '100';
+  pageIndex = 0;
+  pageSize = 2;
+  totalTaskCount = this.taskService.tasks().length;
   filterName = '';
   loading = false;
   notData = false;
@@ -69,13 +69,13 @@ export class ListTasksComponent implements OnInit {
     this.loading = true;
     this.taskService
       .getTasks(
-        this.page,
-        this.start,
-        this.limit,
+        this.pageIndex,
+        this.pageSize,
         this.filterStatus,
         this.filterName,
       )
       .subscribe((tasks) => {
+        console.log(tasks);
         this.tasks = tasks;
         this.loading = false;
         this.notData = tasks.length === 0;
@@ -188,5 +188,31 @@ export class ListTasksComponent implements OnInit {
         console.log(12);
       }
     });
+  }
+
+  /**
+   * Calcula el número total de páginas disponibles
+   */
+  totalPages(): number {
+    return Math.ceil(this.totalTaskCount / this.pageSize);
+  }
+
+  /**
+   * Retorna un array con los números de página para mostrar en la paginación
+   */
+  pages(): number[] {
+    const totalPages = this.totalPages();
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  /**
+   * Cambia la página actual y vuelve a cargar las tareas
+   * @param page Número de página al que se debe cambiar
+   */
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.pageIndex = page;
+      this.loadTaks();
+    }
   }
 }

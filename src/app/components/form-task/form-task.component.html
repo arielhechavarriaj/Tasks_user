@@ -1,13 +1,11 @@
 <div class="container-fluid">
-
   <div class="row justify-content-center mt-5" style="height: 100vh">
-
     <div class="col-md-6">
       <div
               *ngIf="
-      taskSelected().status == StatusTask.done ||
-      taskSelected().status == StatusTask.incomplete
-    "
+          taskSelected().status == StatusTask.done ||
+          taskSelected().status == StatusTask.incomplete
+        "
               class="alert alert-danger"
               role="alert"
       >
@@ -20,7 +18,7 @@
       >
         <h2 class="card-title d-flex justify-content-center align-items-center">
           {{
-          taskSelected() == null ? "  Crear una tarea" : "Actualizar la tarea"
+          taskSelected().name == undefined ? "  Crear una tarea" : "Actualizar la tarea"
           }}
         </h2>
 
@@ -101,27 +99,6 @@
                     type="date"
             />
           </div>
-          <div
-                  *ngIf="
-              taskForm.get('created_date')?.hasError('required') &&
-              taskForm.get('created_date')?.touched
-            "
-                  class="text-warning"
-          >
-            El campo Fecha de creación es requerido
-          </div>
-
-          <div
-                  *ngIf="
-              taskForm
-                .get('created_date')
-                ?.hasError('created_date_initial_invalid') &&
-              taskForm.get('created_date')?.touched
-            "
-                  class="text-warning"
-          >
-            La fecha de creacion debe ser menor a la fecha de expiracion.
-          </div>
         </div>
 
         <div class="form-group my-1">
@@ -184,7 +161,8 @@
           <option
                   [disabled]="
               taskSelected().status === StatusTask.done ||
-              taskSelected().status == StatusTask.incomplete ||  taskSelected().status == StatusTask.inProgress
+              taskSelected().status == StatusTask.incomplete ||
+              taskSelected().status == StatusTask.inProgress
             "
                   [selected]="taskSelected().status == StatusTask.created"
                   value="Creado"
@@ -194,7 +172,7 @@
           <option
                   [disabled]="
               taskSelected().status === StatusTask.done ||
-              taskSelected().status == StatusTask.incomplete
+              taskSelected().status == StatusTask.incomplete ||  taskSelected().status == StatusTask.created
             "
                   [selected]="taskSelected().status == StatusTask.inProgress"
                   value="En Progreso"
@@ -204,7 +182,7 @@
           <option
                   [disabled]="
               taskSelected().status === StatusTask.done ||
-              taskSelected().status == StatusTask.incomplete
+              taskSelected().status == StatusTask.incomplete ||  taskSelected().status == StatusTask.created
             "
                   [selected]="taskSelected().status == StatusTask.done"
                   value="Terminado"
@@ -214,7 +192,7 @@
           <option
                   [disabled]="
               taskSelected().status === StatusTask.done ||
-              taskSelected().status == StatusTask.incomplete
+              taskSelected().status == StatusTask.incomplete ||  taskSelected().status == StatusTask.created
             "
                   [selected]="taskSelected().status == StatusTask.incomplete"
                   value="No Completado"
