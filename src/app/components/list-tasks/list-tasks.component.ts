@@ -29,18 +29,49 @@ import { ModalComponent } from '@components/modal/modal.component';
   styleUrls: ['./list-tasks.component.scss'],
 })
 export class ListTasksComponent implements OnInit {
+  /**
+   * coleccion de Tareas
+   */
   tasks: Task[] = [];
+  /**
+   * filtro de estado
+   */
   filterStatus = '';
+  /**
+   * Filtro de nombre
+   */
   nameFilter = '';
+  /**
+   * Filtros de tarea
+   */
   filteredTasks: Task[] = [];
-
+  /**
+   * Servicio de tareas
+   */
   taskService = inject(TaskService);
+  /**
+   * Servicio de autenticacion
+   */
   authService = inject(AuthService);
+  /**
+   * formBuilder
+   */
   fb = inject(FormBuilder);
+  /**
+   * Router
+   */
   route = inject(Router);
+  /**
+   * Servicio para cargar el modal
+   */
   modalService = inject(ModalService);
-
+  /**
+   * Mapa para los colores por estado
+   */
   colorStatusMap = new Map();
+  /**
+   * Formulario
+   */
   taskForm: FormGroup = this.fb.group({
     filterName: [''],
     filterStatus: [''],
