@@ -1,27 +1,26 @@
 <div class="container p-4">
   <div
-          class="d-flex justify-content-center alert alert-success shadows-lg my-lg-2"
-          role="alert"
+    class="d-flex justify-content-center alert alert-success shadows-lg my-lg-2"
+    role="alert"
   >
     <span>
       Hola
-      <strong class="alert-link " href="#"
+      <strong class="alert-link" href="#"
       >{{ authService.currentUser()?.name | uppercase }} </strong
       >estas son sus tareas.</span
     >
   </div>
 
-
-  <div class="container ">
+  <div class="container">
     <div fxLayout="row" fxLayoutAlign="space-between center">
-      <form [formGroup]="taskForm" class=" mb-2 mx-3 row">
+      <form [formGroup]="taskForm" class="mb-2 mx-3 row">
         <div class="form-group row text-success col-6">
           <label for="stateFilter">Filtrar por Estado:</label>
           <select
-                  class="form-control"
-                  formControlName="filterStatus"
-                  id="stateFilter"
-                  name="stateFilter"
+            class="form-control"
+            formControlName="filterStatus"
+            id="stateFilter"
+            name="stateFilter"
           >
             <option class="bg-dark text-primary" value="">---Todos---</option>
             <option selected value="Creado">Creado</option>
@@ -30,51 +29,48 @@
             <option value="No Completado">No Completado</option>
           </select>
         </div>
-        <div class="form-group row text-success col-6 ">
+        <div class="form-group row text-success col-6">
           <div class="">
             <label for="nameFilter">Filtrar por Nombre:</label>
             <div class="input-group">
               <input
-                      class="form-control"
-                      formControlName="filterName"
-                      id="nameFilter"
-                      name="nameFilter"
-                      placeholder="Buscar.."
-                      type="text"
+                class="form-control"
+                formControlName="filterName"
+                id="nameFilter"
+                name="nameFilter"
+                placeholder="Buscar.."
+                type="text"
               />
               <div class="input-group-append">
-              <span class="input-group-text text-success">
-                <i class="bi bi-search"></i>
-              </span>
+                <span class="input-group-text text-success">
+                  <i class="bi bi-search"></i>
+                </span>
               </div>
             </div>
           </div>
-
         </div>
       </form>
       <span>
-       <button
-               (click)="onNewTask()"
-               class="btn btn-outline-success mx-1 bi bi-building-add"
-       >
-      Nueva Tarea
-    </button>
-    <button
-            (click)="showOldestInProgressTask()"
-            class="btn btn-outline-success mx-1 bi bi-clock-history"
-    >
-      Más Antigua
-    </button>
+        <button
+          (click)="onNewTask()"
+          class="btn btn-outline-success mx-1 bi bi-building-add"
+        >
+          Nueva Tarea
+        </button>
+        <button
+          (click)="showOldestInProgressTask()"
+          class="btn btn-outline-success mx-1 bi bi-clock-history"
+        >
+          Más Antigua
+        </button>
 
-    <button
-            (click)="showExpiredTasks()"
-            class="btn btn-outline-danger ml-3 bi bi-calendar-check"
-    >
-      Tareas Vencidas
-    </button>
-   </span>
-
-
+        <button
+          (click)="showExpiredTasks()"
+          class="btn btn-outline-danger ml-3 bi bi-calendar-check"
+        >
+          Tareas Vencidas
+        </button>
+      </span>
     </div>
     <table class="table table-hover table-striped table-bordered">
       <thead class="table-success">
@@ -85,22 +81,22 @@
         <th scope="col">Creado</th>
         <th scope="col">Fecha límite</th>
         <th scope="col">Estado</th>
-        <th scope="col">actions</th>
+        <th scope="col"></th>
       </tr>
       </thead>
       <tbody>
       <div
-              *ngIf="loading"
-              class="spinner-grow text-secondary"
-              role="status"
+        *ngIf="loading"
+        class="spinner-grow text-secondary"
+        role="status"
       ></div>
 
-      <tr *ngIf="notData"
-      >No hay informacion disponible
+      <tr *ngIf="notData">
+        No hay informacion disponible
       </tr>
 
       <tr
-              *ngFor="let task of filteredTasks; index as i; trackBy: trackByTask"
+        *ngFor="let task of filteredTasks; index as i; trackBy: trackByTask"
       >
         <th scope="row">{{ i + 1 }}</th>
         <td>{{ task.name }}</td>
@@ -114,16 +110,15 @@
         </td>
         <td>
           <button
-                  (click)="onViewTask(task)"
-                  class="btn btn-sm btn-primary mx-1 bi bi-eye"
-
-                  type="button"
+            (click)="onViewTask(task)"
+            class="btn btn-sm btn-primary mx-1 bi bi-eye"
+            type="button"
           ></button>
           <button
-                  [disabled]="task.status!=StatusTask.created"
-                  (click)="onRemoveTask(task)"
-                  class="btn btn-sm btn-danger bi bi-trash"
-                  type="button"
+            (click)="onRemoveTask(task)"
+            [disabled]="task.status != StatusTask.created"
+            class="btn btn-sm btn-danger bi bi-trash"
+            type="button"
           ></button>
         </td>
       </tr>
@@ -131,7 +126,6 @@
     </table>
 
     <nav aria-label="Paginacion" class="d-flex justify-content-between">
-
       <div class="">
         <!--        <label for="pageSizeSelect" class="">Elementos por página:</label>-->
         <!--        <select [(ngModel)]="pageSize" id="pageSizeSelect" class="form-control col-2">-->
@@ -139,39 +133,21 @@
         <!--          <option value="10">10</option>-->
         <!--          <option value="20">20</option>-->
         <!--        </select>      -->
-
-
       </div>
-      <ul class="pagination mt-3 ">
+      <ul class="pagination mt-3">
         <li [class.disabled]="pageIndex === 0" class="page-item">
           <a (click)="goToPage(pageIndex - 1)" class="page-link">Anterior</a>
         </li>
         <li *ngFor="let page of pages()" class="page-item">
           <a (click)="goToPage(page)" class="page-link">{{ page }}</a>
         </li>
-        <li [class.disabled]="pageIndex === totalPages()" class="page-item">
+        <li [class.disabled]="pageIndex === totalPages()-1" class="page-item">
           <a (click)="goToPage(pageIndex + 1)" class="page-link">Siguiente</a>
         </li>
       </ul>
-
-
     </nav>
 
-    <!--    <nav aria-label="Paginacion">-->
-    <!--      <ul class="pagination justify-content-center">-->
-    <!--        <li [class.disabled]="pageIndex === 0" class="page-item">-->
-    <!--          <a (click)="goToPage(pageIndex - 1)" class="page-link">Anterior</a>-->
-    <!--        </li>-->
-    <!--        <li *ngFor="let page of pages()" class="page-item">-->
-    <!--          <a (click)="goToPage(page)" class="page-link">{{ page }}</a>-->
-    <!--        </li>-->
-    <!--        <li [class.disabled]="pageIndex === totalPages()" class="page-item">-->
-    <!--          <a (click)="goToPage(pageIndex + 1)" class="page-link">Siguiente</a>-->
-    <!--        </li>-->
-    <!--      </ul>-->
-    <!--    </nav>-->
-
-
+    pageIndex:{{pageIndex}} total:{{totalPages()}}
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-# Proyecto de Gestión de Tareas en Angular
+# Proyecto de Gestión de Tareas
 
 Este proyecto de Angular es una aplicación de gestión de tareas que permite a los usuarios autenticados administrar sus
 tareas. Incluye las siguientes características:
@@ -8,6 +8,10 @@ tareas. Incluye las siguientes características:
 - Filtrado y paginación de tareas.
 - Visualización de la tarea que ha estado más tiempo en progreso.
 - Visualización de tareas vencidas.
+
+## Sitio online
+
+https://tasks-user.vercel.app/
 
 ## Requisitos
 
@@ -20,7 +24,7 @@ npm install -g @angular/cli
 
 1. Clona este repositorio en tu máquina local:
 
-git clone https://github.com/tuusuario/tu-proyecto-angular.git
+`git clone https://github.com/tuusuario/tu-proyecto-angular.git`
 
 2. Navega hasta el directorio del proyecto:
 
@@ -28,13 +32,13 @@ cd tu-proyecto-angular
 
 3. Instala las dependencias:
 
-npm install
+`npm install`
 
 ## Ejecución
 
 4. Inicia la aplicación Angular:
 
-mg serve
+`npm run start`
 
 5. Abre tu navegador web y navega a http://localhost:4200/ para acceder a la aplicación.
 

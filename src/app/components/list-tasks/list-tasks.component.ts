@@ -47,12 +47,35 @@ export class ListTasksComponent implements OnInit {
     searchServer: [true],
   });
 
+  /**
+   * pagina actual
+   */
   pageIndex = 0;
+  /**
+   * tamano de pagina
+   */
   pageSize = 5;
+  /**
+   * Total de tareas total
+   */
   totalTaskCount = this.taskService.tasks().length;
+  /**
+   * filtro para el nombre
+   */
   filterName = '';
+  /**
+   * flag para mostrar el estado de cargando
+   */
   loading = false;
+
+  /**
+   * Flag para indicar la ausencia de elementos
+   */
   notData = false;
+  /**
+   * estado de la tarea
+   * @protected
+   */
   protected readonly StatusTask = StatusTask;
 
   /**
@@ -76,6 +99,9 @@ export class ListTasksComponent implements OnInit {
     this.colorStatusMap.set(StatusTask.incomplete, 'text-bg badge-danger');
   }
 
+  /**
+   * Cargar las tareas
+   */
   loadTaks() {
     this.loading = true;
     this.taskService
@@ -94,12 +120,17 @@ export class ListTasksComponent implements OnInit {
       });
   }
 
+  /**
+   * Funcion para indexar los elementos
+   * @param index
+   * @param item
+   */
   trackByTask(index: number, item: Task): string {
     return item.id;
   }
 
   /**
-   * Función para mostrar la tarea en progreso más antigua en un SweetAlert
+   * mostrar la tarea en progreso más antigua en un SweetAlert
    */
   showOldestInProgressTask(): void {
     const oldestInProgressTasks = this.filteredTasks.filter(
@@ -165,14 +196,25 @@ export class ListTasksComponent implements OnInit {
     });
   }
 
+  /**
+   * Adiccionar una nueva Tarea
+   */
   onNewTask() {
     this.route.navigateByUrl('/formTask/').then();
   }
 
+  /**
+   * Vista para editar o visualizar la tarea
+   * @param task
+   */
   onViewTask(task: Task) {
     this.route.navigateByUrl(`/formTask/${task.id}`).then();
   }
 
+  /**
+   * Eliminar una tarea
+   * @param task
+   */
   onRemoveTask(task: Task) {
     Swal.fire({
       title: 'Esta seguro que quiere eliminar esta tarea?',
