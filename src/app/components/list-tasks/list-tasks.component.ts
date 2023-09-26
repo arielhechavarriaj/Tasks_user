@@ -48,7 +48,7 @@ export class ListTasksComponent implements OnInit {
   });
 
   pageIndex = 0;
-  pageSize = 2;
+  pageSize = 5;
   totalTaskCount = this.taskService.tasks().length;
   filterName = '';
   loading = false;
