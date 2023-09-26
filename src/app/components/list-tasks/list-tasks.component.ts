@@ -12,11 +12,19 @@ import Swal from 'sweetalert2';
 import { AuthService } from '@services/auth.service';
 import { Router } from '@angular/router';
 import { FlexModule } from '@angular/flex-layout';
+import { ModalService } from '@services/modal.service';
+import { ModalComponent } from '@components/modal/modal.component';
 
 @Component({
   selector: 'app-list-tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FlexModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FlexModule,
+    ModalComponent,
+  ],
   templateUrl: './list-tasks.component.html',
   styleUrls: ['./list-tasks.component.scss'],
 })
@@ -25,10 +33,13 @@ export class ListTasksComponent implements OnInit {
   filterStatus = '';
   nameFilter = '';
   filteredTasks: Task[] = [];
+
   taskService = inject(TaskService);
   authService = inject(AuthService);
   fb = inject(FormBuilder);
   route = inject(Router);
+  modalService = inject(ModalService);
+
   colorStatusMap = new Map();
   taskForm: FormGroup = this.fb.group({
     filterName: [''],
@@ -136,20 +147,7 @@ export class ListTasksComponent implements OnInit {
       return;
     }
 
-    const expiredTasksList = expiredTasks
-      .map(
-        (task) =>
-          `${task.name} - Fecha de vencimiento: ${new Date(
-            task.expire_date,
-          ).toLocaleDateString()}`,
-      )
-      .join('<br>');
-
-    Swal.fire({
-      title: 'Tareas Vencidas',
-      html: expiredTasksList,
-      icon: 'warning',
-    }).then();
+    this.modalService.open(expiredTasks);
   }
 
   /**
