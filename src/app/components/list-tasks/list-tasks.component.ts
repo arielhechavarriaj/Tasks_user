@@ -89,7 +89,8 @@ export class ListTasksComponent implements OnInit {
   /**
    * Total de tareas total
    */
-  totalTaskCount = this.taskService.tasks().length;
+  totalTaskCount =
+    this.taskService.tasks() != null ? this.taskService.tasks().length : 0;
   /**
    * filtro para el nombre
    */
