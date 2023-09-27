@@ -3,26 +3,34 @@
             (click)="close()"
             [class.open]="display.stateModal === StateModal.open"
     >
-        <div (click)="$event.stopPropagation()" class="card modal-container">
-            <div class="card-title">Tareas Vencidas</div>
-            <div class="modal-content">
-                <ul class="list-group task-list">
-                    <li *ngFor="let task of display.expiredTasks" class="list-group-item">
-                        {{ task.name }} - Fecha de vencimiento:
-                        {{ task.expire_date | date: "dd/MM/yyyy" }}
-                    </li>
-                </ul>
-            </div>
 
-            <div class="d-grid gap-2">
-                <button
-                        (click)="close()"
-                        class="btn btn-outline-success mt-3"
-                        type="submit"
-                >
-                    <span></span>Cerrar
-                </button>
-            </div>
+
+      <div (click)="$event.stopPropagation()" class="card text-center">
+        <div class="card-header">
+          Tareas Vencidas
         </div>
+        <div class="card-body">
+          <h5 class="card-title">Vencieron la fecha límite de realización</h5>
+          <ul class="list-group task-list shadows-lg
+">
+            <li *ngFor="let task of display.expiredTasks" class="list-group-item">
+              {{ task.name }} - Fecha de vencimiento:
+              {{ task.expire_date | date: "dd/MM/yyyy" }}
+            </li>
+          </ul>
+
+        </div>
+        <div class="card-footer text-body-secondary">
+          <button
+            (click)="close()"
+            class="btn btn-outline-success mt-3"
+            type="submit"
+          >
+            <span></span>Cerrar
+          </button>
+        </div>
+      </div>
+
+
     </section>
 </ng-container>

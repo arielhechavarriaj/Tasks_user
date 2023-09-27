@@ -44,7 +44,6 @@ const passwordValidator: ValidatorFn = (
     FlexModule,
     RouterLink,
   ],
-  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
   errorMessage = '';

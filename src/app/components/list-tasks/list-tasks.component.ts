@@ -148,6 +148,7 @@ export class ListTasksComponent implements OnInit {
         this.loading = false;
         this.notData = tasks.length === 0;
         this.filterTasks();
+        // this.totalTaskCount = tasks.length;
       });
   }
 
@@ -282,7 +283,8 @@ export class ListTasksComponent implements OnInit {
    */
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages()) {
-      this.pageIndex = page;
+      this.pageIndex = page - 1;
+      console.log('vamos a la pagina ');
       this.loadTaks();
     }
   }
