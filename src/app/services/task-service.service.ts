@@ -31,7 +31,7 @@ export class TaskService {
     filterName: string = '',
   ): Observable<Task[]> {
     // Aplicar los filtros
-    let filteredTasks = this.tasks();
+    let filteredTasks = this.tasks() || [];
 
     if (filterStatus) {
       filteredTasks = filteredTasks.filter(
