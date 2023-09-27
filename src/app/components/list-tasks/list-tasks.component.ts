@@ -131,7 +131,7 @@ export class ListTasksComponent implements OnInit {
   }
 
   /**
-   * Cargar las tareas
+   * Cargando las tareas
    */
   loadTaks() {
     this.loading = true;
@@ -153,7 +153,7 @@ export class ListTasksComponent implements OnInit {
   }
 
   /**
-   * Funcion para indexar los elementos
+   * Indexar los elementos
    * @param index
    * @param item
    */
@@ -162,7 +162,7 @@ export class ListTasksComponent implements OnInit {
   }
 
   /**
-   * mostrar la tarea en progreso más antigua en un SweetAlert
+   * Las tarea en progreso más antigua en un SweetAlert
    */
   showOldestInProgressTask(): void {
     const oldestInProgressTasks = this.filteredTasks.filter(
@@ -197,7 +197,7 @@ export class ListTasksComponent implements OnInit {
   }
 
   /**
-   * Mostrar la tareas que hayan expirado
+   * Las tareas que hayan expirado
    */
   showExpiredTasks(): void {
     const currentDate = new Date();
@@ -214,7 +214,7 @@ export class ListTasksComponent implements OnInit {
   }
 
   /**
-   * Filtrar las tareas
+   * Filtra las tareas
    */
   filterTasks(): void {
     this.filteredTasks = this.tasks.filter((task) => {
@@ -229,7 +229,7 @@ export class ListTasksComponent implements OnInit {
   }
 
   /**
-   * Adiccionar una nueva Tarea
+   * Adicciona una nueva Tarea
    */
   onNewTask() {
     this.route.navigateByUrl('/formTask/').then();
@@ -244,7 +244,7 @@ export class ListTasksComponent implements OnInit {
   }
 
   /**
-   * Eliminar una tarea
+   * Elimina una tarea
    * @param task
    */
   onRemoveTask(task: Task) {
