@@ -54,9 +54,10 @@ export class FormTaskComponent implements OnInit {
           nameControl?.valueChanges
             ?.pipe(switchMap((value) => this.taskService.isNameTaken(value)))
             .subscribe((value) => {
-              nameControl?.setErrors({
-                nameTaken: value != undefined,
-              });
+              if (value != undefined)
+                nameControl?.setErrors({
+                  nameTaken: true,
+                });
             });
         }
       });
@@ -84,12 +85,18 @@ export class FormTaskComponent implements OnInit {
         let id = new Date().getTime().toString();
         let obj = this.taskForm.value;
         const newTask: any = { ...obj, id };
-        this.taskService.createTask(newTask);
-      } else
-        this.taskService.updateTask({
-          ...this.taskForm.value,
-          id: this.taskSelected().id,
+        this.taskService.createTask(newTask).subscribe(() => {
+          this.router.navigateByUrl('/task').then();
         });
+      } else
+        this.taskService
+          .updateTask({
+            ...this.taskForm.value,
+            id: this.taskSelected().id,
+          })
+          .subscribe(() => {
+            this.router.navigateByUrl('/task').then();
+          });
   }
 
   private datesValidation() {

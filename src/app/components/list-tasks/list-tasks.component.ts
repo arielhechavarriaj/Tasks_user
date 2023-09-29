@@ -114,7 +114,7 @@ export class ListTasksComponent implements OnInit {
    * ngOnInit
    */
   ngOnInit(): void {
-    this.loadTaks();
+    this.loadTasks();
 
     this.taskForm.controls['filterName'].valueChanges.subscribe((value) => {
       this.nameFilter = value;
@@ -128,13 +128,13 @@ export class ListTasksComponent implements OnInit {
     this.colorStatusMap.set(StatusTask.created, 'badge text-bg-warning');
     this.colorStatusMap.set(StatusTask.inProgress, 'badge text-bg-primary');
     this.colorStatusMap.set(StatusTask.done, 'badge text-bg-success');
-    this.colorStatusMap.set(StatusTask.incomplete, 'text-bg badge-danger');
+    this.colorStatusMap.set(StatusTask.incomplete, 'badge text-bg-danger');
   }
 
   /**
    * Cargando las tareas
    */
-  loadTaks() {
+  loadTasks() {
     this.loading = true;
     this.taskService
       .getTasks(
@@ -144,12 +144,10 @@ export class ListTasksComponent implements OnInit {
         this.filterName,
       )
       .subscribe((tasks) => {
-        console.log(tasks);
         this.tasks = tasks;
         this.loading = false;
         this.notData = tasks.length === 0;
         this.filterTasks();
-        // this.totalTaskCount = tasks.length;
       });
   }
 
@@ -202,9 +200,9 @@ export class ListTasksComponent implements OnInit {
    */
   showExpiredTasks(): void {
     const currentDate = new Date();
-    const expiredTasks = this.filteredTasks.filter(
-      (task) => new Date(task.expire_date) < currentDate,
-    );
+    const expiredTasks = this.taskService
+      .tasks()
+      .filter((task) => new Date(task.expire_date) < currentDate);
 
     if (expiredTasks.length === 0) {
       Swal.fire('No hay tareas vencidas', '', 'info').then();
@@ -256,7 +254,7 @@ export class ListTasksComponent implements OnInit {
       cancelButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.taskService.deleteTask(task.id).subscribe(() => this.loadTaks());
+        this.taskService.deleteTask(task.id).subscribe(() => this.loadTasks());
       } else if (result.isDenied) {
         console.log(12);
       }
@@ -286,7 +284,7 @@ export class ListTasksComponent implements OnInit {
     if (page >= 1 && page <= this.totalPages()) {
       this.pageIndex = page - 1;
       console.log('vamos a la pagina ');
-      this.loadTaks();
+      this.loadTasks();
     }
   }
 }

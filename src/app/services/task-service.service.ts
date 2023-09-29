@@ -74,14 +74,15 @@ export class TaskService {
    * Crear una Tarea
    * @param newTask
    */
-  createTask(newTask: Task): void {
+  createTask(newTask: Task): Observable<any> {
     const _tasks = localStorage.getItem('tasks');
     const collectionTaks: Task[] = _tasks ? JSON.parse(_tasks) : [];
     collectionTaks.push(newTask);
     localStorage.setItem('tasks', JSON.stringify(collectionTaks));
 
-    this.router.navigateByUrl('/task').then();
     Swal.fire('Éxito', 'La tarea se ha creado con éxito', 'success').then();
+
+    return of(true);
   }
 
   /**
@@ -98,19 +99,20 @@ export class TaskService {
    * Actualizar una tarea
    * @param task
    */
-  updateTask(task: any): void {
+  updateTask(task: any): Observable<any> {
     console.log(task, 'updating.....');
     const existingTaskIndex = this.tasks().findIndex((t) => t.id === task.id);
     if (existingTaskIndex !== -1) {
       this.tasks()[existingTaskIndex] = task;
       localStorage.setItem('tasks', JSON.stringify(this.tasks()));
-      this.router.navigateByUrl('/task').then();
+
       Swal.fire(
         'Éxito',
         'La tarea se ha actualizado con éxito',
         'success',
       ).then();
     }
+    return of(true);
   }
 
   /**
